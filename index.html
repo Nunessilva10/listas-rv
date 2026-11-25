@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Listas RV · aprovação</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;800&family=Archivo:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* VOICE: direto e de trabalho, como a prancheta do box antes da largada
+   IDEA: a folha de checagem do box: cada lista é um item a liberar
+   PICTURE: o painel de largada no topo, 4 luzes que acendem quando cada lista é aprovada
+   COLOUR and TYPE: asfalto escuro, amarelo bandeira #FFC81F, vermelho zebra #D8262F; Saira Condensed + Archivo
+   LAYOUT: faixa de título com as luzes, cartões das listas em uma coluna, envios já feitos, rodapé com o botão */
+:root{color-scheme:light dark;--bg:light-dark(#f4f3ef,#111214);--card:light-dark(#fff,#1b1d21);--ink:light-dark(#16171a,#f1f1ee);--mut:light-dark(#5d6068,#a3a6ad);--line:light-dark(#e2e0da,#2c2f35);--asf:#17191d;--y:#FFC81F;--r:#D8262F;--ok:light-dark(#127a45,#4fd28c)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Archivo,system-ui,sans-serif;overflow-x:clip}
+.band{padding:clamp(28px,4vw,56px) max(5vw,16px)}
+.wrap{max-width:980px;margin:0 auto}
+h1,h2,h3{font-family:"Saira Condensed",sans-serif;line-height:1.05;margin:0;text-wrap:balance}
+h1{font-size:clamp(34px,5vw,50px);font-weight:800}
+h2{font-size:30px;font-weight:800;margin-bottom:6px}
+h3{font-size:26px;font-weight:600}
+.top{background:var(--asf);color:#f1f1ee;position:relative;overflow:hidden}
+.top::after{content:"";position:absolute;left:0;right:0;bottom:0;height:12px;background:repeating-linear-gradient(90deg,var(--r) 0 28px,#fff 28px 56px)}
+.top p{color:#c9cbd0;max-width:62ch;margin:12px 0 0}
+.grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:32px;align-items:center}
+.lights{display:flex;gap:14px;justify-content:center;background:#0b0c0e;border-radius:18px;padding:22px 18px;box-shadow:inset 0 2px 0 #2b2e34,0 10px 30px #0006}
+.lamp{flex:1;max-width:76px;text-align:center;font:600 15px "Saira Condensed",sans-serif;color:#8d9097}
+.lamp i{display:block;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,#3a3d44,#1d1f23 70%);border:3px solid #2a2d33;margin-bottom:8px;transition:background .35s,box-shadow .35s}
+.lamp.on i{background:radial-gradient(circle at 35% 30%,#fff3c2,var(--y) 55%,#b88a00);box-shadow:0 0 26px #ffc81f99;border-color:#6b5300}
+.lamp.on{color:#fff}
+.count{margin-top:14px;text-align:center;font:800 22px "Saira Condensed",sans-serif;color:var(--y)}
+.lista{background:var(--card);border:1px solid var(--line);border-radius:14px;margin:16px 0;overflow:hidden}
+.lista.ok{border-color:var(--ok)}
+.lh{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:16px;align-items:center;padding:18px 20px}
+.chk{width:44px;height:44px;border-radius:10px;border:2px solid var(--line);background:transparent;cursor:pointer;display:grid;place-items:center;font-size:24px;color:transparent}
+.chk:focus-visible,.btn:focus-visible,summary:focus-visible{outline:3px solid var(--y);outline-offset:2px}
+.ok .chk{background:var(--ok);border-color:var(--ok);color:#fff}
+.meta{color:var(--mut);font-size:15px}
+.tag{display:inline-block;font-size:13px;padding:2px 9px;border-radius:99px;background:light-dark(#f1efe8,#25282e);margin:4px 4px 0 0;white-space:nowrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 18px;border-radius:10px;border:2px solid var(--ink);color:var(--ink);background:transparent;font:600 15px Archivo,sans-serif;text-decoration:none;cursor:pointer;white-space:nowrap}
+.btn.y{background:var(--y);border-color:var(--y);color:#16171a}
+details{border-top:1px solid var(--line)}
+summary{cursor:pointer;padding:12px 20px;color:var(--mut);font-size:15px;min-height:44px;display:flex;align-items:center}
+.emps{columns:2 260px;gap:24px;padding:4px 20px 18px;margin:0;list-style:none;font-size:15px}
+.emps li{break-inside:avoid;padding:3px 0;border-bottom:1px dashed var(--line)}
+.emps small{color:var(--mut)}
+.bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:8px}
+table{width:100%;border-collapse:collapse;background:var(--card);border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:14px;color:var(--mut);font-weight:600}
+td.n{text-align:right;white-space:nowrap}
+.foot{background:var(--asf);color:#f1f1ee;position:sticky;bottom:0;z-index:2}
+.foot .wrap{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:14px max(5vw,16px)}
+.foot .btn{border-color:#f1f1ee;color:#f1f1ee}.foot .btn.y{color:#16171a;border-color:var(--y)}
+#msg{font-size:14px;color:#c9cbd0}
+@media(max-width:700px){.grid{grid-template-columns:minmax(0,1fr)}.lh{grid-template-columns:auto minmax(0,1fr)}.lh .btn{grid-column:1/-1}}
+@media(max-width:600px){table{font-size:13px}.stack thead{display:none}.stack tr{display:grid;padding-block:10px}.stack td{display:flow-root;border:0;padding:3px 0;padding-inline-start:8em;text-align:start}.stack td::before{content:attr(data-l);float:inline-start;width:7.5em;margin-inline-start:-8em;white-space:normal;color:var(--mut)}.stack td:empty{display:none}}
+@media(prefers-reduced-motion:reduce){.lamp i{transition:none}}
+</style><script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script></head>
+<body>
+<header class="top band"><div class="wrap grid">
+<div><h1>Listas do RV de novembro: 4 aguardando sua aprovação</h1>
+<p>Adriana, aqui estão as listas de 50 empresas que entreguei em novembro. Marque as que você aprova, baixe a planilha se quiser ver os detalhes e me mande a confirmação pelo botão no fim da página.</p></div>
+<div><div class="lights" id="lights"></div><div class="count" id="count"></div></div>
+</div></header>
+<main class="band"><div class="wrap">
+<h2>Para aprovar</h2>
+<p class="meta">Cada lista tem 50 empresas, sem montadoras, apostas e fabricantes de pneus, e sem repetir empresas já usadas. Depois da aprovação eu levanto os decisores (CEO, diretor geral, comercial e marketing) e os e-mails.</p>
+<div class="bar"><button class="btn" id="todas" type="button">Marcar todas</button></div>
+<div id="listas"></div>
+<h2 style="margin-top:44px">Já enviadas</h2>
+<p class="meta">Listas que já receberam e-mail pelo contato@rvracing.com.br, com você em cópia oculta.</p>
+<table class="stack"><thead><tr><th>Lista</th><th>1º e-mail</th><th>2º e-mail</th><th>Super Final (25/11)</th><th>Retornos</th></tr></thead><tbody>
+<tr><td>27/10 · lista unificada (50 empresas)</td><td>27/10 · 50 e-mails</td><td>11/11 · 45 e-mails</td><td>Incluída no envio de 101</td><td>Mobiauto, TIM, Webmotors, Ezze e SEG em conversa. Valtra e Zletric recusaram</td></tr>
+<tr><td>03/11 · Fenatran (50 empresas)</td><td>09/11 · 70 e-mails</td><td>24/11 · 65 e-mails</td><td>Incluída no envio de 101</td><td>SKF vai olhar a proposta. Golfleet teve reuniões. Tecnomotor e Hyva recusaram</td></tr>
+</tbody></table>
+<p class="meta">E-mail da Super Final em Interlagos (13/12): 101 e-mails com a apresentação anexada, em 4 lotes de 25/11 (17:20, 17:50, 18:20 e 18:50).</p>
+</div></main>
+<footer class="foot"><div class="wrap"><span id="msg">Nenhuma lista marcada ainda.</span>
+<div class="bar" style="margin:0"><button class="btn" id="copiar" type="button">Copiar resposta</button><a class="btn y" id="wa" href="#" target="_blank" rel="noopener">Enviar pelo WhatsApp</a></div></div></footer>
+<script>
+const LISTAS=[{"id": "03-11", "data": "03/11", "tema": "Setores variados", "arq": "planilhas/RV_Lista_03-11_setores_variados.xlsx", "emp": [["Nubank", "Fintech e banco digital"], ["C6 Bank", "Banco digital"], ["XP Inc", "Investimentos"], ["BTG Pactual", "Banco de investimento"], ["Sicredi", "Cooperativa de crédito"], ["Banco Inter", "Banco digital"], ["Mapfre Brasil", "Seguros"], ["Allianz Seguros", "Seguros"], ["Tokio Marine", "Seguros"], ["Azul Seguros", "Seguros"], ["Zurich Brasil", "Seguros"], ["Sompo Seguros", "Seguros"], ["Magazine Luiza", "Varejo"], ["Casas Bahia", "Varejo"], ["KaBuM", "E-commerce de tecnologia"], ["Amazon Brasil", "E-commerce"], ["Samsung Brasil", "Eletrônicos"], ["Motorola Brasil", "Eletrônicos"], ["Claro Brasil", "Telecom"], ["Vivo (Telefônica Brasil)", "Telecom"], ["Azul Linhas Aéreas", "Aviação"], ["GOL Linhas Aéreas", "Aviação"], ["LATAM Brasil", "Aviação"], ["Braspress", "Logística"], ["Loggi", "Logística"], ["JSL", "Logística"], ["Raízen", "Energia e combustíveis"], ["Ultragaz", "Energia"], ["CVC Corp", "Viagens"], ["Red Bull Brasil", "Bebidas energéticas"], ["Monster Energy Brasil", "Bebidas energéticas"], ["Heineken Brasil", "Bebidas"], ["Coca-Cola Brasil", "Bebidas"], ["Ambev", "Bebidas"], ["Castrol Brasil", "Lubrificantes"], ["Makita Brasil", "Ferramentas elétricas"], ["Stihl", "Equipamentos"], ["Tramontina", "Ferramentas e utilidades"], ["Stanley Black & Decker Brasil", "Ferramentas"], ["Vonder (Vonpar)", "Ferramentas"], ["WEG", "Motores e automação"], ["Tigre", "Construção"], ["Votorantim Cimentos", "Construção"], ["MRV", "Imobiliário"], ["Cyrela", "Imobiliário"], ["Hapvida", "Saúde"], ["JBS", "Alimentos"], ["BRF", "Alimentos"], ["JBL Brasil (Harman)", "Áudio"], ["Garmin Brasil", "Eletrônicos e GPS"]]}, {"id": "17-11", "data": "17/11", "tema": "Setores variados", "arq": "planilhas/RV_Lista_17-11_setores_variados.xlsx", "emp": [["Petrobras", "Energia"], ["Vale", "Infraestrutura"], ["Gerdau", "Indústria"], ["Suzano", "Indústria"], ["Klabin", "Indústria"], ["CSN", "Indústria"], ["Usiminas", "Indústria"], ["Braskem", "Indústria"], ["Cosan", "Energia"], ["Eletrobras (Axia Energia)", "Energia"], ["Equatorial Energia", "Energia"], ["Neoenergia", "Energia"], ["CPFL Energia", "Energia"], ["Engie Brasil", "Energia"], ["Eneva", "Energia"], ["Copel", "Energia"], ["Sabesp", "Infraestrutura"], ["Rumo", "Infraestrutura"], ["Santos Brasil", "Infraestrutura"], ["Embraer", "Indústria"], ["Siemens Brasil", "Indústria"], ["ABB Brasil", "Indústria"], ["Schneider Electric Brasil", "Indústria"], ["Whirlpool (Brastemp e Consul)", "Indústria"], ["Electrolux Brasil", "Indústria"], ["3M do Brasil", "Indústria"], ["BASF Brasil", "Indústria"], ["Dow Brasil", "Indústria"], ["Sherwin-Williams Brasil", "Indústria"], ["Coral (AkzoNobel)", "Indústria"], ["Rede D'Or", "Saúde"], ["Fleury", "Saúde"], ["Bradesco Seguros", "Financeiro"], ["Itaú Unibanco", "Financeiro"], ["Santander Brasil", "Financeiro"], ["Banco do Brasil", "Financeiro"], ["Caixa Econômica Federal", "Financeiro"], ["SulAmérica", "Financeiro"], ["Estapar", "Serviços"], ["Multiplan", "Imóveis e shoppings"], ["Iguatemi", "Imóveis e shoppings"], ["Allos", "Imóveis e shoppings"], ["Accor Brasil", "Lazer e eventos"], ["Sodexo Brasil", "Serviços"], ["Alelo", "Serviços"], ["Smart Fit", "Lazer e eventos"], ["Sympla", "Lazer e eventos"], ["Hotmart", "Tecnologia"], ["Banco Safra", "Financeiro"], ["Grupo Ultra", "Energia"]]}, {"id": "18-11", "data": "18/11", "tema": "Feiras do setor automotivo", "arq": "planilhas/RV_Lista_18-11_feiras.xlsx", "emp": [["AutoZone Brasil", "Varejo de autopeças"], ["ACDelco", "Autopeças (marca GM)"], ["Mopar (Stellantis)", "Peças e acessórios"], ["Texaco Lubrificantes", "Lubrificantes"], ["Lwart Lubrificantes", "Lubrificantes"], ["Fuchs Lubrificantes", "Lubrificantes"], ["Fersa Bearings", "Rolamentos"], ["NTN-SNR", "Rolamentos"], ["KS Kolbenschmidt (Rheinmetall)", "Componentes de motor"], ["HL Mando", "Freios e suspensão"], ["UFI Filters", "Filtros"], ["Wahler", "Componentes de motor"], ["Kostal", "Eletrônica automotiva"], ["Schunk do Brasil", "Componentes automotivos"], ["CIE Durametal", "Freios"], ["Indasa", "Abrasivos e funilaria"], ["thyssenkrupp", "Molas e componentes"], ["SAF-Holland", "Componentes para pesados"], ["Rossetti Equipamentos Rodoviários", "Implementos rodoviários"], ["Pastre", "Implementos rodoviários"], ["Aspöck do Brasil", "Iluminação para pesados"], ["Sergomel", "Implementos rodoviários"], ["TRATON Financial Services", "Financiamento de frotas"], ["Rede de Postos Sim", "Combustíveis e postos"], ["Sigaway", "Telemetria"], ["Horse Powertrain", "Motores"], ["Baterias Pioneiro", "Baterias"], ["Grupo Tiger", "Autopeças"], ["MIC Autopeças", "Autopeças"], ["AGEL", "Autopeças"], ["CBV do Brasil", "Autopeças"], ["Hikari", "Lâmpadas e iluminação"], ["Chiptronic", "Eletrônica e performance"], ["Simplo", "Software para oficinas"], ["Raven Ferramentas", "Ferramentas"], ["Sigma Tools", "Ferramentas"], ["Loja do Mecânico", "Ferramentas e e-commerce"], ["Brucke Engates (Reforcel)", "Engates e acessórios"], ["LEGO Brasil", "Brinquedos"], ["Approve", "Moda streetwear"], ["Corzus", "Som automotivo"], ["Altech Turbos", "Turbos"], ["Cinpal", "Componentes automotivos"], ["Quinelato Freios", "Freios"], ["Original Filter", "Filtros"], ["Cofran", "Iluminação"], ["Wisa Automotiva", "Autopeças"], ["Secpower", "Infraestrutura para elétricos"], ["Fever", "Ingressos e experiências"], ["Grupo Autobras", "Autopeças"]]}, {"id": "24-11", "data": "24/11", "tema": "Tecnologia, software e mídia digital", "arq": "planilhas/RV_Lista_24-11_tecnologia.xlsx", "emp": [["Senior Sistemas", "Tecnologia, software e mídia digital"], ["Linx", "Tecnologia, software e mídia digital"], ["Sankhya", "Tecnologia, software e mídia digital"], ["Omie", "Tecnologia, software e mídia digital"], ["Conta Azul", "Tecnologia, software e mídia digital"], ["RD Station", "Tecnologia, software e mídia digital"], ["Zenvia", "Tecnologia, software e mídia digital"], ["Blip", "Tecnologia, software e mídia digital"], ["Movile", "Tecnologia, software e mídia digital"], ["Tivit", "Tecnologia, software e mídia digital"], ["Sinqia", "Tecnologia, software e mídia digital"], ["CI&T", "Tecnologia, software e mídia digital"], ["Globant Brasil", "Tecnologia, software e mídia digital"], ["Accenture Brasil", "Tecnologia, software e mídia digital"], ["IBM Brasil", "Tecnologia, software e mídia digital"], ["Oracle Brasil", "Tecnologia, software e mídia digital"], ["SAP Brasil", "Tecnologia, software e mídia digital"], ["Microsoft Brasil", "Tecnologia, software e mídia digital"], ["Google Brasil", "Tecnologia, software e mídia digital"], ["Meta Brasil", "Tecnologia, software e mídia digital"], ["TikTok Brasil", "Tecnologia, software e mídia digital"], ["Kwai Brasil", "Tecnologia, software e mídia digital"], ["Cisco Brasil", "Tecnologia, software e mídia digital"], ["Huawei Brasil", "Tecnologia, software e mídia digital"], ["Ericsson Brasil", "Tecnologia, software e mídia digital"], ["Nokia Brasil", "Tecnologia, software e mídia digital"], ["Oi", "Tecnologia, software e mídia digital"], ["Algar Telecom", "Tecnologia, software e mídia digital"], ["Brisanet", "Tecnologia, software e mídia digital"], ["Embratel", "Tecnologia, software e mídia digital"], ["Elgin", "Tecnologia, software e mídia digital"], ["Multilaser", "Tecnologia, software e mídia digital"], ["Hikvision Brasil", "Tecnologia, software e mídia digital"], ["Gupy", "Tecnologia, software e mídia digital"], ["Nuvemshop", "Tecnologia, software e mídia digital"], ["Tray", "Tecnologia, software e mídia digital"], ["Softplan", "Tecnologia, software e mídia digital"], ["Neogrid", "Tecnologia, software e mídia digital"], ["Pipefy", "Tecnologia, software e mídia digital"], ["Wipro Brasil", "Tecnologia, software e mídia digital"], ["Capgemini Brasil", "Tecnologia, software e mídia digital"], ["UOL", "Tecnologia, software e mídia digital"], ["Grupo Globo", "Tecnologia, software e mídia digital"], ["Spotify Brasil", "Tecnologia, software e mídia digital"], ["Netflix Brasil", "Tecnologia, software e mídia digital"], ["AWS Brasil", "Tecnologia, software e mídia digital"], ["Salesforce Brasil", "Tecnologia, software e mídia digital"], ["Adobe Brasil", "Tecnologia, software e mídia digital"], ["Zendesk Brasil", "Tecnologia, software e mídia digital"], ["Trend Micro Brasil", "Tecnologia, software e mídia digital"]]}];</script>
+<script>
+{
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let ok=new Set();
+try{ok=new Set(JSON.parse(localStorage.getItem('rv-aprov')||'[]'))}catch(e){}
+const box=document.getElementById('listas');
+box.innerHTML=LISTAS.map(l=>{
+  const sec={};l.emp.forEach(([,s])=>sec[s]=(sec[s]||0)+1);
+  const tags=Object.entries(sec).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([s,n])=>`<span class="tag">${esc(s)} · ${n}</span>`).join('');
+  return `<article class="lista" id="l${esc(l.id)}">
+  <div class="lh"><button class="chk" type="button" data-id="${esc(l.id)}" aria-pressed="false" aria-label="Aprovar lista de ${esc(l.data)}">✓</button>
+  <div><h3>Lista de ${esc(l.data)}</h3><div class="meta">${esc(l.tema)} · ${l.emp.length} empresas</div><div>${tags}</div></div>
+  <a class="btn" href="${esc(l.arq)}" target="_blank" rel="noopener">Baixar planilha</a></div>
+  <details><summary>Ver as ${l.emp.length} empresas</summary><ul class="emps">${l.emp.map(([e,s])=>`<li>${esc(e)} <small>${esc(s)}</small></li>`).join('')}</ul></details></article>`}).join('');
+const lights=document.getElementById('lights');
+lights.innerHTML=LISTAS.map(l=>`<div class="lamp" data-id="${esc(l.id)}"><i></i>${esc(l.data)}</div>`).join('');
+const texto=()=>{
+  const sim=LISTAS.filter(l=>ok.has(l.id)).map(l=>`${l.data} (${l.tema})`);
+  const nao=LISTAS.filter(l=>!ok.has(l.id)).map(l=>l.data);
+  let t='Cleodon, aprovo as listas do RV: '+(sim.length?sim.join('; '):'nenhuma ainda')+'.';
+  if(nao.length)t+=' Ainda não aprovei: '+nao.join(', ')+'.';
+  return t;
+};
+const render=()=>{
+  document.querySelectorAll('.chk').forEach(b=>{const on=ok.has(b.dataset.id);b.setAttribute('aria-pressed',on);b.closest('.lista').classList.toggle('ok',on)});
+  document.querySelectorAll('.lamp').forEach(x=>x.classList.toggle('on',ok.has(x.dataset.id)));
+  document.getElementById('count').textContent=`${ok.size} de ${LISTAS.length} aprovadas`;
+  document.getElementById('msg').textContent=ok.size?`${ok.size} lista(s) marcada(s). Envie a confirmação ao Cleodon.`:'Nenhuma lista marcada ainda.';
+  document.getElementById('wa').href='https://wa.me/?text='+encodeURIComponent(texto());
+  document.getElementById('todas').textContent=ok.size===LISTAS.length?'Desmarcar todas':'Marcar todas';
+  try{localStorage.setItem('rv-aprov',JSON.stringify([...ok]))}catch(e){}
+};
+box.addEventListener('click',e=>{const b=e.target.closest('.chk');if(!b)return;const id=b.dataset.id;ok.has(id)?ok.delete(id):ok.add(id);render()});
+document.getElementById('todas').addEventListener('click',()=>{ok=ok.size===LISTAS.length?new Set():new Set(LISTAS.map(l=>l.id));render()});
+document.getElementById('copiar').addEventListener('click',async e=>{try{await navigator.clipboard.writeText(texto());e.target.textContent='Copiado'}catch(err){e.target.textContent='Não deu para copiar'}setTimeout(()=>e.target.textContent='Copiar resposta',2000)});
+render();
+}
+</script></body></html>
