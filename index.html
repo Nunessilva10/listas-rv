@@ -59,12 +59,15 @@ td.n{text-align:right;white-space:nowrap}
 </style><script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script></head>
 <body>
 <header class="top band"><div class="wrap grid">
-<div><h1>Listas do RV de novembro: 4 aguardando sua aprovação</h1>
+<div><h1>Listas do RV de novembro: 1 aprovada, 3 aguardando</h1>
 <p>Adriana, aqui estão as listas de 50 empresas que entreguei em novembro. Marque as que você aprova, baixe a planilha se quiser ver os detalhes e me mande a confirmação pelo botão no fim da página.</p></div>
 <div><div class="lights" id="lights"></div><div class="count" id="count"></div></div>
 </div></header>
 <main class="band"><div class="wrap">
-<h2>Para aprovar</h2>
+<h2>Já aprovadas</h2>
+<p class="meta">Listas que você já aprovou na conversa. Os decisores e e-mails delas entram no próximo levantamento.</p>
+<div id="aprovadas"></div>
+<h2 style="margin-top:44px">Para aprovar</h2>
 <p class="meta">Cada lista tem 50 empresas, sem montadoras, apostas e fabricantes de pneus, e sem repetir empresas já usadas. Depois da aprovação eu levanto os decisores (CEO, diretor geral, comercial e marketing) e os e-mails.</p>
 <div class="bar"><button class="btn" id="todas" type="button">Marcar todas</button></div>
 <div id="listas"></div>
@@ -83,21 +86,26 @@ const LISTAS=[{"id": "03-11", "data": "03/11", "tema": "Setores variados", "arq"
 <script>
 {
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const PRE=new Set(['18-11']);
 let ok=new Set();
 try{ok=new Set(JSON.parse(localStorage.getItem('rv-aprov')||'[]'))}catch(e){}
+PRE.forEach(i=>ok.add(i));
 const box=document.getElementById('listas');
-box.innerHTML=LISTAS.map(l=>{
+const box2=document.getElementById('aprovadas');
+const card=l=>{
   const sec={};l.emp.forEach(([,s])=>sec[s]=(sec[s]||0)+1);
   const tags=Object.entries(sec).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([s,n])=>`<span class="tag">${esc(s)} · ${n}</span>`).join('');
   return `<article class="lista" id="l${esc(l.id)}">
   <div class="lh"><button class="chk" type="button" data-id="${esc(l.id)}" aria-pressed="false" aria-label="Aprovar lista de ${esc(l.data)}">✓</button>
   <div><h3>Lista de ${esc(l.data)}</h3><div class="meta">${esc(l.tema)} · ${l.emp.length} empresas</div><div>${tags}</div></div>
   <a class="btn" href="${esc(l.arq)}" target="_blank" rel="noopener">Baixar planilha</a></div>
-  <details><summary>Ver as ${l.emp.length} empresas</summary><ul class="emps">${l.emp.map(([e,s])=>`<li>${esc(e)} <small>${esc(s)}</small></li>`).join('')}</ul></details></article>`}).join('');
+  <details><summary>Ver as ${l.emp.length} empresas</summary><ul class="emps">${l.emp.map(([e,s])=>`<li>${esc(e)} <small>${esc(s)}</small></li>`).join('')}</ul></details></article>`};
+box.innerHTML=LISTAS.filter(l=>!PRE.has(l.id)).map(card).join('');
+box2.innerHTML=LISTAS.filter(l=>PRE.has(l.id)).map(l=>card(l).replace('aria-pressed="false"','aria-pressed="true" disabled').replace('<div class="meta">','<div class="meta"><b>Aprovada pela Adriana</b> · ')).join('');
 const lights=document.getElementById('lights');
 lights.innerHTML=LISTAS.map(l=>`<div class="lamp" data-id="${esc(l.id)}"><i></i>${esc(l.data)}</div>`).join('');
 const texto=()=>{
-  const sim=LISTAS.filter(l=>ok.has(l.id)).map(l=>`${l.data} (${l.tema})`);
+  const sim=LISTAS.filter(l=>ok.has(l.id)&&!PRE.has(l.id)).map(l=>`${l.data} (${l.tema})`);
   const nao=LISTAS.filter(l=>!ok.has(l.id)).map(l=>l.data);
   let t='Cleodon, aprovo as listas do RV: '+(sim.length?sim.join('; '):'nenhuma ainda')+'.';
   if(nao.length)t+=' Ainda não aprovei: '+nao.join(', ')+'.';
@@ -107,13 +115,13 @@ const render=()=>{
   document.querySelectorAll('.chk').forEach(b=>{const on=ok.has(b.dataset.id);b.setAttribute('aria-pressed',on);b.closest('.lista').classList.toggle('ok',on)});
   document.querySelectorAll('.lamp').forEach(x=>x.classList.toggle('on',ok.has(x.dataset.id)));
   document.getElementById('count').textContent=`${ok.size} de ${LISTAS.length} aprovadas`;
-  document.getElementById('msg').textContent=ok.size?`${ok.size} lista(s) marcada(s). Envie a confirmação ao Cleodon.`:'Nenhuma lista marcada ainda.';
+  document.getElementById('msg').textContent=ok.size>PRE.size?`${ok.size-PRE.size} lista(s) marcada(s). Envie a confirmação ao Cleodon.`:'Nenhuma lista nova marcada ainda.';
   document.getElementById('wa').href='https://wa.me/?text='+encodeURIComponent(texto());
   document.getElementById('todas').textContent=ok.size===LISTAS.length?'Desmarcar todas':'Marcar todas';
   try{localStorage.setItem('rv-aprov',JSON.stringify([...ok]))}catch(e){}
 };
-box.addEventListener('click',e=>{const b=e.target.closest('.chk');if(!b)return;const id=b.dataset.id;ok.has(id)?ok.delete(id):ok.add(id);render()});
-document.getElementById('todas').addEventListener('click',()=>{ok=ok.size===LISTAS.length?new Set():new Set(LISTAS.map(l=>l.id));render()});
+box.addEventListener('click',e=>{const b=e.target.closest('.chk');if(!b||PRE.has(b.dataset.id))return;const id=b.dataset.id;ok.has(id)?ok.delete(id):ok.add(id);render()});
+document.getElementById('todas').addEventListener('click',()=>{ok=ok.size===LISTAS.length?new Set(PRE):new Set(LISTAS.map(l=>l.id));render()});
 document.getElementById('copiar').addEventListener('click',async e=>{try{await navigator.clipboard.writeText(texto());e.target.textContent='Copiado'}catch(err){e.target.textContent='Não deu para copiar'}setTimeout(()=>e.target.textContent='Copiar resposta',2000)});
 render();
 }
