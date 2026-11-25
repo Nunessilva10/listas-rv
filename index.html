@@ -58,6 +58,7 @@ td.n{text-align:right;white-space:nowrap}
 @media(prefers-reduced-motion:reduce){.lamp i{transition:none}}
 .dl{display:block;margin-top:10px;font-size:14px;color:var(--mut)}.dl input{margin-left:6px;font:inherit;padding:4px 6px;max-width:100%}.foot .wrap{flex-wrap:nowrap}#msg{flex:1;min-width:0}
 @media(max-width:700px){.lh{padding:14px;gap:12px}.lh h3{font-size:22px}.foot .btn{padding-inline:14px}}
+.envs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:14px}.env,.rs{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}.env h3,.rs h3{margin:0 0 2px;font-size:22px}.rs h3 span{font:500 13px 'Inter',sans-serif;color:var(--mut);margin-left:6px}.env dl{margin:12px 0 0;display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:15px}.env dt{color:var(--mut)}.env dd{margin:0}.resumo{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px}.rs ul{list-style:none;margin:10px 0 0;padding:0}.rs li{padding:8px 0;border-top:1px solid var(--line);font-size:15px}.rs small{display:block;color:var(--mut);font-size:13px}.rs.quente{border-top:4px solid #d9480f}.rs.frio{border-top:4px solid #3b82c4}.rs.bounce{border-top:4px solid #8d9097}
 </style><script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script></head>
 <body>
 <header class="top band"><div class="wrap grid">
@@ -78,11 +79,33 @@ td.n{text-align:right;white-space:nowrap}
 <div id="dezembro"></div></details>
 <h2 style="margin-top:44px">Já enviadas</h2>
 <p class="meta">Listas que já receberam e-mail pelo contato@rvracing.com.br, com você em cópia oculta.</p>
-<table class="stack"><thead><tr><th>Lista</th><th>1º e-mail</th><th>2º e-mail</th><th>Super Final (25/11)</th><th>Retornos</th></tr></thead><tbody>
-<tr><td>27/10 · lista unificada (50 empresas)</td><td>27/10 · 50 e-mails</td><td>11/11 · 45 e-mails</td><td>Incluída no envio de 101</td><td>Mobiauto, TIM, Webmotors, Ezze e SEG em conversa. Valtra e Zletric recusaram</td></tr>
-<tr><td>03/11 · Fenatran (50 empresas)</td><td>09/11 · 70 e-mails</td><td>24/11 · 65 e-mails</td><td>Incluída no envio de 101</td><td>SKF vai olhar a proposta. Golfleet teve reuniões. Tecnomotor e Hyva recusaram</td></tr>
-</tbody></table>
+<div class="envs">
+<article class="env"><h3>27/10 · lista unificada</h3><div class="meta">50 empresas</div>
+<dl><dt>1º e-mail</dt><dd>27/10 · 50 e-mails</dd><dt>2º e-mail</dt><dd>11/11 · 45 e-mails</dd><dt>Super Final</dt><dd>25/11 · incluída no envio de 101</dd><dt>Retornos</dt><dd>5 em conversa (Mobiauto, TIM, Webmotors, Ezze, SEG) · 2 recusas (Valtra, Zletric)</dd></dl></article>
+<article class="env"><h3>03/11 · Fenatran</h3><div class="meta">50 empresas</div>
+<dl><dt>1º e-mail</dt><dd>09/11 · 70 e-mails</dd><dt>2º e-mail</dt><dd>24/11 · 65 e-mails</dd><dt>Super Final</dt><dd>25/11 · incluída no envio de 101</dd><dt>Retornos</dt><dd>SKF vai olhar a proposta · Golfleet teve reuniões · Tecnomotor e Hyva recusaram</dd></dl></article>
+</div>
 <p class="meta">E-mail da Super Final em Interlagos (13/12): 101 e-mails com a apresentação anexada, em 4 lotes de 25/11 (17:20, 17:50, 18:20 e 18:50).</p>
+<h2 style="margin-top:44px">Resumo dos retornos</h2>
+<p class="meta">Situação dos contatos que já receberam e-mail, atualizada em 25/11.</p>
+<div class="resumo">
+<article class="rs quente"><h3>Contatos quentes <span>conversa aberta</span></h3><ul>
+<li><b>Webmotors</b> <small>reagendando a reunião para 26/11</small></li>
+<li><b>TIM</b> <small>pediu one page com resumo e cotas</small></li>
+<li><b>SEG Automotive</b> <small>recebeu o mídia kit, aguardando</small></li>
+<li><b>Mobiauto</b> <small>conversa com o head de marketing, aguardando</small></li>
+<li><b>Ezze Seguros</b> <small>fazendo o orçamento 2027, retomar em 09/12</small></li>
+<li><b>SKF</b> <small>vai olhar a proposta com atenção</small></li>
+<li><b>Golfleet</b> <small>reunião em reagendamento com a Adriana</small></li></ul></article>
+<article class="rs frio"><h3>Contatos frios <span>recusaram</span></h3><ul>
+<li><b>Valtra</b> <small>não patrocina eventos</small></li>
+<li><b>Zletric</b> <small>sem interesse em 2027</small></li>
+<li><b>Tecnomotor</b> <small>parceria com outra equipe</small></li>
+<li><b>Hyva</b> <small>sem interesse</small></li></ul></article>
+<article class="rs bounce"><h3>E-mails devolvidos <span>bounce</span></h3><ul>
+<li><b>Philco</b></li><li><b>Hipper Freios</b></li><li><b>New Holland</b></li><li><b>HDI</b></li><li><b>Estradeiro</b></li><li><b>Noma</b> <small>o contato do Marcos segue ativo</small></li></ul>
+<p class="meta">Todos já foram retirados dos próximos envios.</p></article>
+</div>
 </div></main>
 <footer class="foot"><div class="wrap"><span id="msg">Nenhuma lista marcada ainda.</span>
 <div class="bar" style="margin:0"><button class="btn y" id="reg" type="button">Enviar aprovação</button></div></div></footer>
@@ -108,7 +131,7 @@ const card=l=>{
   const tags=Object.entries(sec).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([s,n])=>`<span class="tag">${esc(s)} · ${n}</span>`).join('');
   return `<article class="lista" id="l${esc(l.id)}">
   <div class="lh"><button class="chk" type="button" data-id="${esc(l.id)}" aria-pressed="false" aria-label="Aprovar lista de ${esc(l.data)}">✓</button>
-  <div><h3>Lista de ${esc(l.data)}</h3><div class="meta">${esc(l.tema)} · ${l.emp.length} empresas</div><div>${tags}</div>${PRE.has(l.id)?'':'<label class="dl">Programar envio para <input type="date" class="dt" data-id="'+esc(l.id)+'"></label>'}</div>
+  <div><h3>Lista de ${esc(l.data)}</h3><div class="meta">${esc(l.tema)} · ${l.emp.length} empresas</div><div>${tags}</div><label class="dl">Programar envio para <input type="date" class="dt" data-id="${esc(l.id)}"></label></div>
   <a class="btn" href="${esc(l.arq)}" target="_blank" rel="noopener">Baixar planilha</a></div>
   <details><summary>Ver as ${l.emp.length} empresas</summary><ul class="emps">${l.emp.map(([e,s])=>`<li>${esc(e)} <small>${esc(s)}</small></li>`).join('')}</ul></details></article>`};
 const box3=document.getElementById('dezembro');
@@ -138,7 +161,7 @@ document.addEventListener('input',e=>{const i=e.target.closest('.dt');if(!i)retu
 document.querySelectorAll('.dt').forEach(i=>i.value=dts[i.dataset.id]||'');
 {const r=document.getElementById('reg');r.addEventListener('click',async()=>{
   if(!APPS_URL){r.textContent='Em breve';setTimeout(()=>r.textContent='Enviar aprovação',2000);return}
-  const itens=ALL.filter(l=>ok.has(l.id)&&!PRE.has(l.id)).map(l=>({lista:l.data,tema:l.tema,envio:fd(dts[l.id])}));
+  const itens=ALL.filter(l=>ok.has(l.id)&&(!PRE.has(l.id)||dts[l.id])).map(l=>({lista:l.data,tema:l.tema,envio:fd(dts[l.id])}));
   if(!itens.length){r.textContent='Marque uma lista antes';setTimeout(()=>r.textContent='Enviar aprovação',2500);return}
   try{await fetch(APPS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify({itens})});r.textContent='Registrado, obrigada!'}catch(e){r.textContent='Não deu certo, use o WhatsApp'}
   setTimeout(()=>r.textContent='Enviar aprovação',3000)})}
