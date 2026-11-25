@@ -117,7 +117,7 @@ const LISTAS=[{"id": "03-11", "data": "03/11", "tema": "Setores variados", "arq"
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const PRE=new Set(['18-11']);
 const ALL=LISTAS.concat(DEZ);
-const APPS_URL='';
+const APPS_URL='https://script.google.com/macros/s/AKfycbwJCN0mV9M8IPFltdBn5_UDv-MXSIEWrFHcFILGx4R_v6AnCSHzP3WxykJu12RzNbEo/exec';
 let dts={};
 try{dts=JSON.parse(localStorage.getItem('rv-datas')||'{}')}catch(e){}
 const fd=d=>d?d.split('-').reverse().join('/'):'';
