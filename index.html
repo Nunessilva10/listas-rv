@@ -87,6 +87,9 @@ const LISTAS=[{"id": "03-11", "data": "03/11", "tema": "Setores variados", "arq"
 {
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const PRE=new Set(['18-11']);
+let dts={};
+try{dts=JSON.parse(localStorage.getItem('rv-datas')||'{}')}catch(e){}
+const fd=d=>d?d.split('-').reverse().join('/'):'';
 let ok=new Set();
 try{ok=new Set(JSON.parse(localStorage.getItem('rv-aprov')||'[]'))}catch(e){}
 PRE.forEach(i=>ok.add(i));
@@ -98,6 +101,7 @@ const card=l=>{
   return `<article class="lista" id="l${esc(l.id)}">
   <div class="lh"><button class="chk" type="button" data-id="${esc(l.id)}" aria-pressed="false" aria-label="Aprovar lista de ${esc(l.data)}">✓</button>
   <div><h3>Lista de ${esc(l.data)}</h3><div class="meta">${esc(l.tema)} · ${l.emp.length} empresas</div><div>${tags}</div></div>
+  <label class="meta" style="display:block;margin-top:8px">Programar envio para <input type="date" class="dt" data-id="${esc(l.id)}" style="margin-left:6px"></label>
   <a class="btn" href="${esc(l.arq)}" target="_blank" rel="noopener">Baixar planilha</a></div>
   <details><summary>Ver as ${l.emp.length} empresas</summary><ul class="emps">${l.emp.map(([e,s])=>`<li>${esc(e)} <small>${esc(s)}</small></li>`).join('')}</ul></details></article>`};
 box.innerHTML=LISTAS.filter(l=>!PRE.has(l.id)).map(card).join('');
@@ -105,7 +109,7 @@ box2.innerHTML=LISTAS.filter(l=>PRE.has(l.id)).map(l=>card(l).replace('aria-pres
 const lights=document.getElementById('lights');
 lights.innerHTML=LISTAS.map(l=>`<div class="lamp" data-id="${esc(l.id)}"><i></i>${esc(l.data)}</div>`).join('');
 const texto=()=>{
-  const sim=LISTAS.filter(l=>ok.has(l.id)&&!PRE.has(l.id)).map(l=>`${l.data} (${l.tema})`);
+  const sim=LISTAS.filter(l=>ok.has(l.id)&&!PRE.has(l.id)).map(l=>`${l.data} (${l.tema})${dts[l.id]?' - enviar em '+fd(dts[l.id]):''}`);
   const nao=LISTAS.filter(l=>!ok.has(l.id)).map(l=>l.data);
   let t='Cleodon, aprovo as listas do RV: '+(sim.length?sim.join('; '):'nenhuma ainda')+'.';
   if(nao.length)t+=' Ainda não aprovei: '+nao.join(', ')+'.';
@@ -123,6 +127,8 @@ const render=()=>{
 box.addEventListener('click',e=>{const b=e.target.closest('.chk');if(!b||PRE.has(b.dataset.id))return;const id=b.dataset.id;ok.has(id)?ok.delete(id):ok.add(id);render()});
 document.getElementById('todas').addEventListener('click',()=>{ok=ok.size===LISTAS.length?new Set(PRE):new Set(LISTAS.map(l=>l.id));render()});
 document.getElementById('copiar').addEventListener('click',async e=>{try{await navigator.clipboard.writeText(texto());e.target.textContent='Copiado'}catch(err){e.target.textContent='Não deu para copiar'}setTimeout(()=>e.target.textContent='Copiar resposta',2000)});
+document.addEventListener('input',e=>{const i=e.target.closest('.dt');if(!i)return;dts[i.dataset.id]=i.value;try{localStorage.setItem('rv-datas',JSON.stringify(dts))}catch(x){}render()});
+document.querySelectorAll('.dt').forEach(i=>i.value=dts[i.dataset.id]||'');
 render();
 }
 </script></body></html>
